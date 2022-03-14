@@ -3,7 +3,7 @@ import os
 import pathlib
 import time
 from typing import NoReturn
-
+import threading
 import numpy as np
 import soundfile
 import torch
@@ -250,12 +250,11 @@ def separate_dir(args) -> NoReturn:
         tmp_wav_path = '{}.wav'.format(output_path)
         soundfile.write(file=tmp_wav_path, data=sep_audio.T, samplerate=sample_rate)
 
-        os.system(
-            'ffmpeg -y -loglevel panic -i "{}" "{}"'.format(tmp_wav_path, output_path)
-        )
-        os.system('rm "{}"'.format(tmp_wav_path))
-        print('{} / {}, Write out to {}'.format(n, audios_num, output_path))
+        command_1 = 'ffmpeg -y -loglevel panic -i "{}" "{}" \n rm "{}" \n echo {} / {}, Write out to {}'.format(tmp_wav_path, output_path, tmp_wav_path, n, audios_num, output_path)
+        t1 = threading.Thread(target=os.system, args=(command_1,))
 
+        t1.start()
+        
 
 if __name__ == "__main__":
 
