@@ -10,7 +10,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'torch==1.7.1',
+        #'torch==1.7.1',
         'librosa==0.8.0',
         'museval==0.4.0',
         'h5py==2.10.0',
