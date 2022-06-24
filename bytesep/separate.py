@@ -203,7 +203,7 @@ def separate_dir(args) -> NoReturn:
     outputs_dir = args.outputs_dir
     scale_volume = args.scale_volume
     cpu = args.cpu
-
+    
     if cpu or not torch.cuda.is_available():
         device = torch.device('cpu')
     else:
@@ -212,7 +212,7 @@ def separate_dir(args) -> NoReturn:
     # Read yaml files.
     configs = read_yaml(config_yaml)
     sample_rate = configs['train']['sample_rate']
-
+    input_channels = configs['train']['input_channels']
     # Build separator.
     separator = build_separator(config_yaml, checkpoint_path, device)
 
@@ -228,9 +228,8 @@ def separate_dir(args) -> NoReturn:
 
         # Load audio.
         audio = load_audio(audio_path=audio_path, mono=False, sample_rate=sample_rate)
-
+        audio = match_audio_channels(audio, input_channels)
         input_dict = {'waveform': audio}
-
         # Separate
         separate_time = time.time()
 
